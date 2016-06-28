@@ -42,6 +42,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Unknown)
     }
     
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        if application.applicationState == .Active {
+            if let aps = userInfo["aps"] as? NSDictionary {
+                if let alert = aps["alert"] as? String {
+                    let alert = UIAlertController(title: "受け取ったメッセージは", message: alert, preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                    self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+
+
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
